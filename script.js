@@ -1,8 +1,8 @@
 class Book {
-  constructor(title, author, isbn) {
+  constructor(title, author, status) {
     this.title = title;
     this.author = author;
-    this.isbn = isbn;
+    this.status = status;
   }
 }
 
@@ -10,13 +10,14 @@ class UI {
   static displayBook() {
     const StoredBooks = [
       {
-        title: "Book One",
-        author: "A.A",
-        isbn: "666666",
+        title: "To Kill a Mockingbird",
+        author: "Harper Lee",
+        status: "Read",
       },
       {
-        title: "Book Two",
-        author: "B.B",
+        title: "The Thorn Birds",
+        author: "Colleen McCullough",
+        status: "Not Read",
       },
     ];
     const books = StoredBooks;
@@ -32,7 +33,7 @@ class UI {
     row.innerHTML = `
       <td>${book.title}</td>
       <td>${book.author}</td>
-      <td>${book.isbn}</td>
+      <td>${book.status}</td>
       <td><input type="button" class="delete" value = "delete"></td>
       `;
     list.appendChild(row);
@@ -47,7 +48,7 @@ class UI {
   static clearFields() {
     document.querySelector("#title").value = "";
     document.querySelector("#author").value = "";
-    document.querySelector("#isbn").value = "";
+    document.querySelector("#status").value = "";
   }
 }
 
@@ -62,10 +63,10 @@ document.querySelector("#book-form").addEventListener("submit", (e) => {
   // Get form values
   const title = document.querySelector("#title").value;
   const author = document.querySelector("#author").value;
-  const isbn = document.querySelector("#isbn").value;
+  const status = document.querySelector("#status").value;
 
   // Instatiate book
-  const book = new Book(title, author, isbn);
+  const book = new Book(title, author, status);
 
   // Add Book to UI
   UI.addBookToList(book);

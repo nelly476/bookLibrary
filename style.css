@@ -68,6 +68,7 @@ form p {
 #book-form {
   height: fit-content;
   margin: 0;
+  padding: 1rem 3rem;
 }
 
 #book-form input {
@@ -75,17 +76,25 @@ form p {
 }
 
 table {
-  padding: 1rem;
+  margin-top: 2.5rem;
+  padding: 1rem 0;
   width: 100%;
+
+  border-collapse: collapse;
 }
 
 th,
 td {
   text-align: center;
-  padding: 13px 23px;
+  padding: 13px 25px;
   border-bottom: 2px solid #cbd5e1;
 }
 
 tr:nth-child(even) {
   background-color: #f1f5f9;
+}
+
+a:link {
+  color: rgba(69, 7, 255, 0.822);
+  text-decoration: none;
 }
