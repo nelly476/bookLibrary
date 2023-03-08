@@ -1,81 +1,29 @@
-class Book {
-  constructor(title, author, status) {
-    this.title = title;
-    this.author = author;
-    this.status = status;
-  }
-}
+const bookForm = document.getElementById("book-form");
+const title = document.getElementById("title");
+const author = document.getElementById("author");
+const isRead = document.getElementById("status");
+const bookList = document.getElementById("book-list");
 
-class UI {
-  static displayBook() {
-    const StoredBooks = [
-      {
-        title: "To Kill a Mockingbird",
-        author: "Harper Lee",
-        status: "Read",
-      },
-      {
-        title: "The Thorn Birds",
-        author: "Colleen McCullough",
-        status: "Not Read",
-      },
-    ];
-    const books = StoredBooks;
+let myLibrary = [];
 
-    books.forEach((book) => UI.addBookToList(book));
-  }
+const bookFactory = (title, author, isRead) => {
+  return { title, author, isRead };
+};
 
-  static addBookToList(book) {
-    const list = document.querySelector("#book-list");
-
-    const row = document.createElement("tr");
-
-    row.innerHTML = `
-      <td>${book.title}</td>
-      <td>${book.author}</td>
-      <td>${book.status}</td>
-      <td><input type="button" class="delete" value = "delete"></td>
-      `;
-    list.appendChild(row);
-  }
-
-  static deleteBook(el) {
-    if (el.classList.contains("delete")) {
-      el.parentElement.parentElement.remove();
-    }
-  }
-
-  static clearFields() {
-    document.querySelector("#title").value = "";
-    document.querySelector("#author").value = "";
-    document.querySelector("#status").value = "";
-  }
-}
-
-// Event: Display Books
-document.addEventListener("DOMContentLoaded", UI.displayBook);
-
-//Event: Add a Book
-document.querySelector("#book-form").addEventListener("submit", (e) => {
-  // Prevent actual submit
+bookForm.addEventListener("submit", (e) => {
   e.preventDefault();
+  const newBook = bookFactory(title.value, author.value, isRead.value);
+  myLibrary.push(newBook);
 
-  // Get form values
-  const title = document.querySelector("#title").value;
-  const author = document.querySelector("#author").value;
-  const status = document.querySelector("#status").value;
-
-  // Instatiate book
-  const book = new Book(title, author, status);
-
-  // Add Book to UI
-  UI.addBookToList(book);
-
-  // Clear fields
-  UI.clearFields();
-});
-
-//Event: Remove a Book
-document.querySelector("#book-list").addEventListener("click", (e) => {
-  UI.deleteBook(e.target);
+  if (myLibrary.length > 0) {
+    myLibrary.map((item) => {
+      const row = document.createElement("tr");
+      const cell = document.createElement("td");
+      const cellText = document.createTextNode(newBook.title);
+      cell.appendChild(cellText);
+      row.appendChild(cell);
+      row.appendChild(cell);
+      bookList.appendChild(row);
+    });
+  }
 });
