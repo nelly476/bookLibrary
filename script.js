@@ -17,12 +17,17 @@ bookForm.addEventListener("submit", (e) => {
 
   if (myLibrary.length > 0) {
     myLibrary.map((item) => {
+      // console.log(item);
       const row = document.createElement("tr");
-      const cell = document.createElement("td");
-      const cellText = document.createTextNode(newBook.title);
-      cell.appendChild(cellText);
-      row.appendChild(cell);
-      row.appendChild(cell);
+      const titleCell = document.createElement("td");
+      const authorCell = document.createElement("td");
+
+      const titleTextCell = document.createTextNode(item.title);
+      const authorTextCell = document.createTextNode(item.author);
+      titleCell.appendChild(titleTextCell);
+      authorCell.appendChild(authorTextCell);
+      row.appendChild(titleCell);
+      row.appendChild(authorCell);
       bookList.appendChild(row);
     });
   }
