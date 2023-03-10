@@ -1,81 +1,65 @@
-class Book {
-  constructor(title, author, status) {
-    this.title = title;
-    this.author = author;
-    this.status = status;
-  }
+const bookForm = document.getElementById("book-form");
+const title = document.getElementById("title");
+const author = document.getElementById("author");
+const status = document.getElementById("status");
+const bookList = document.getElementById("book-list");
+let booksFromStorage = JSON.parse(localStorage.getItem("allBooks"));
+
+let myLibrary = [];
+// localStorage.clear();
+
+if (booksFromStorage) {
+  booksFromStorage.forEach((item) => {
+    // console.log(item);
+    displayBooks(item);
+  });
+  myLibrary = booksFromStorage;
 }
 
-class UI {
-  static displayBook() {
-    const StoredBooks = [
-      {
-        title: "To Kill a Mockingbird",
-        author: "Harper Lee",
-        status: "Read",
-      },
-      {
-        title: "The Thorn Birds",
-        author: "Colleen McCullough",
-        status: "Not Read",
-      },
-    ];
-    const books = StoredBooks;
-
-    books.forEach((book) => UI.addBookToList(book));
+const bookFactory = (title, author, status) => {
+  let isRead = false;
+  if (status === "Read") {
+    isRead = true;
   }
+  return { title, author, isRead };
+};
 
-  static addBookToList(book) {
-    const list = document.querySelector("#book-list");
-
-    const row = document.createElement("tr");
-
-    row.innerHTML = `
-      <td>${book.title}</td>
-      <td>${book.author}</td>
-      <td>${book.status}</td>
-      <td><input type="button" class="delete" value = "delete"></td>
-      `;
-    list.appendChild(row);
-  }
-
-  static deleteBook(el) {
-    if (el.classList.contains("delete")) {
-      el.parentElement.parentElement.remove();
-    }
-  }
-
-  static clearFields() {
-    document.querySelector("#title").value = "";
-    document.querySelector("#author").value = "";
-    document.querySelector("#status").value = "";
-  }
-}
-
-// Event: Display Books
-document.addEventListener("DOMContentLoaded", UI.displayBook);
-
-//Event: Add a Book
-document.querySelector("#book-form").addEventListener("submit", (e) => {
-  // Prevent actual submit
+bookForm.addEventListener("submit", (e) => {
   e.preventDefault();
+  const newBook = bookFactory(title.value, author.value, status.value);
+  // console.log(newBook);
+  myLibrary.push(newBook);
+  title.value = "";
+  author.value = "";
 
-  // Get form values
-  const title = document.querySelector("#title").value;
-  const author = document.querySelector("#author").value;
-  const status = document.querySelector("#status").value;
-
-  // Instatiate book
-  const book = new Book(title, author, status);
-
-  // Add Book to UI
-  UI.addBookToList(book);
-
-  // Clear fields
-  UI.clearFields();
+  localStorage.setItem("allBooks", JSON.stringify(myLibrary));
+  displayBooks(newBook);
 });
 
-//Event: Remove a Book
-document.querySelector("#book-list").addEventListener("click", (e) => {
-  UI.deleteBook(e.target);
-});
+function displayBooks(newBook) {
+  const row = document.createElement("tr");
+  const titleCell = document.createElement("td");
+  const authorCell = document.createElement("td");
+  const select = document.createElement("select");
+  const option = document.createElement("option");
+  const optionTwo = document.createElement("option");
+
+  if (newBook.isRead) {
+    option.value = option.textContent = "Read";
+    optionTwo.value = optionTwo.textContent = "Not read";
+  } else {
+    option.value = option.textContent = "Not read";
+    optionTwo.value = optionTwo.textContent = "Read";
+  }
+
+  const titleTextCell = document.createTextNode(newBook.title);
+  const authorTextCell = document.createTextNode(newBook.author);
+  titleCell.appendChild(titleTextCell);
+  authorCell.appendChild(authorTextCell);
+  select.appendChild(option);
+  select.appendChild(optionTwo);
+  row.appendChild(titleCell);
+  row.appendChild(authorCell);
+  row.appendChild(select);
+  bookList.appendChild(row);
+}
